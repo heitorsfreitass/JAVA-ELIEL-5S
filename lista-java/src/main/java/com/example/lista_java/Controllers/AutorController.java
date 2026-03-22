@@ -1,10 +1,8 @@
 package com.example.lista_java.Controllers;
 
 import com.example.lista_java.Entities.Autor;
-import com.example.lista_java.Repositories.AutorRepository;
 import com.example.lista_java.Services.AutorService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.repository.support.Repositories;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;

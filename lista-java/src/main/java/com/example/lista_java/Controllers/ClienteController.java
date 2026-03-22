@@ -2,7 +2,6 @@ package com.example.lista_java.Controllers;
 
 import com.example.lista_java.Entities.Cliente;
 import com.example.lista_java.Services.ClienteService;
-import org.apache.coyote.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

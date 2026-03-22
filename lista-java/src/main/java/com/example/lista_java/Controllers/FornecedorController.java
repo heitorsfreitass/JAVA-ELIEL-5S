@@ -1,13 +1,15 @@
 package com.example.lista_java.Controllers;
 
 import com.example.lista_java.Entities.Fornecedor;
-import com.example.lista_java.Repositories.FornecedorRepository;
 import com.example.lista_java.Services.FornecedorService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import java.net.URI;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping(path = "/fornecedores")
@@ -16,19 +18,32 @@ public class FornecedorController {
     @Autowired
     private FornecedorService fornecedorService;
 
-    public Fornecedor addFornecedor(Fornecedor fornecedor) {
-        return fornecedorService.addFornecedor(fornecedor);
+    @PostMapping
+    public ResponseEntity<Fornecedor> addFornecedor(@RequestBody Fornecedor fornecedor) {
+        Fornecedor request = fornecedorService.addFornecedor(fornecedor);
+        URI uri = ServletUriComponentsBuilder.fromCurrentRequestUri()
+                .path("/{id}")
+                .buildAndExpand(fornecedor.getId())
+                .toUri();
+
+        return ResponseEntity.created().body(request);
     }
 
-    public List<Fornecedor> findAllFornecedores() {
-        return fornecedorService.findAllFornecedores();
+    @GetMapping
+    public ResponseEntity<List<Fornecedor>> findAllFornecedores() {
+        List<Fornecedor> request = fornecedorService.findAllFornecedores();
+
+        return ResponseEntity.ok().body(request);
     }
 
-    public Fornecedor findFornecedoresById(Long id) {
+    @GetMapping("/{id}")
+    public Optional<Fornecedor> findFornecedoresById(@PathVariable Long id) {
         return fornecedorService.findFornecedorById(id);
     }
 
-    public void deleteFornecedor(Long id) {
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> deleteFornecedor(@PathVariable Long id) {
         fornecedorService.deleteFornecedor(id);
+        return ResponseEntity.noContent().build();
     }
 }

@@ -1,12 +1,15 @@
 package com.example.lista_java.Controllers;
 
 import com.example.lista_java.Entities.Pedido;
-import com.example.lista_java.Repositories.PedidoRepository;
 import com.example.lista_java.Services.PedidoService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import java.net.URI;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping(path = "/pedidos")
@@ -16,22 +19,31 @@ public class PedidoController {
     private PedidoService pedidoService;
 
     @PostMapping
-    public Pedido addPedido(@RequestBody Pedido pedido) {
-        return pedidoService.addPedido(pedido);
+    public ResponseEntity<Pedido> addPedido(@RequestBody Pedido pedido) {
+        Pedido request = pedidoService.addPedido(pedido);
+        URI uri = ServletUriComponentsBuilder.fromCurrentRequestUri()
+                .path("/{id}")
+                .buildAndExpand(pedido.getId())
+                .toUri();
+
+        return ResponseEntity.created().body(request);
     }
 
     @GetMapping
-    public List<Pedido> findAllPedidos() {
-        return pedidoService.findAllPedidos();
+    public ResponseEntity<List<Pedido>> findAllPedidos() {
+        List<Pedido> request = pedidoService.findAllPedidos();
+
+        return ResponseEntity.ok().body(request);
     }
 
     @GetMapping("/{id}")
-    public Pedido findPedidoById(@PathVariable Long id) {
+    public Optional<Pedido> findPedidoById(@PathVariable Long id) {
         return pedidoService.findPedidoById(id);
     }
 
     @DeleteMapping("/{id}")
-    public void deletePedido(@PathVariable Long id) {
+    public ResponseEntity<?> deletePedido(@PathVariable Long id) {
         pedidoService.deletePedido(id);
+        return ResponseEntity.noContent().build();
     }
 }
